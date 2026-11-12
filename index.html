@@ -165,14 +165,17 @@
         </div>
 
         <div>
-          <div class="flex items-center justify-between mb-1">
+          <div class="flex flex-wrap items-center justify-between gap-1 mb-1">
             <label class="text-slate-400">Alamat Lengkap Pengiriman *</label>
-            <div class="flex gap-1.5">
+            <div class="flex flex-wrap gap-1">
+              <button type="button" onclick="detectUserGpsLocation('public')" class="text-[11px] bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-slate-950 font-extrabold px-2.5 py-0.5 rounded-lg transition flex items-center gap-1">
+                <i class="fa-solid fa-location-crosshairs"></i> Titik GPS HP
+              </button>
               <button type="button" onclick="calculateAddressDistance('public')" class="text-[11px] bg-sky-500/20 hover:bg-sky-500 text-sky-400 hover:text-slate-950 font-bold px-2.5 py-0.5 rounded-lg transition flex items-center gap-1">
-                <i class="fa-solid fa-magnifying-glass-location"></i> Hitung Jarak Maps
+                <i class="fa-solid fa-magnifying-glass-location"></i> Hitung Jarak
               </button>
               <button type="button" onclick="openMapPickerModal('public')" class="text-[11px] bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 font-bold px-2.5 py-0.5 rounded-lg transition flex items-center gap-1">
-                <i class="fa-solid fa-map-location-dot"></i> Pilih Titik Peta
+                <i class="fa-solid fa-map-location-dot"></i> Buka Peta
               </button>
             </div>
           </div>
@@ -390,11 +393,11 @@
       </div>
 
       <!-- ==================== MENU 1: KASIR (3 JENIS HARGA + ZONA JARAK + MAPS + BARCODE) ==================== -->
-      <section id="menu-kasir" class="flex-1 flex flex-col lg:flex-row h-full overflow-hidden">
+      <section id="menu-kasir" class="flex-1 flex flex-col lg:flex-row h-full overflow-y-auto lg:overflow-hidden">
         <!-- Kiri: Filter 3 Jenis Harga, Zona Jarak, Barcode & Katalog -->
-        <div class="flex-1 flex flex-col h-full overflow-hidden p-3.5 gap-3">
+        <div class="flex-1 flex flex-col min-h-[60vh] lg:min-h-0 lg:h-full overflow-visible lg:overflow-hidden p-3 sm:p-3.5 gap-2.5">
           <!-- Baris Kontrol Harga (3 Jenis Harga & 4 Zona Jarak) -->
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 grid grid-cols-1 xl:grid-cols-2 gap-2.5">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-2.5 sm:p-3 grid grid-cols-1 xl:grid-cols-2 gap-2">
             <!-- Pilihan 3 Jenis Harga Barang -->
             <div class="space-y-1.5">
               <div class="flex items-center justify-between text-xs">
@@ -454,12 +457,12 @@
           <!-- Input File Tersembunyi untuk Upload Cepat Gambar Barang dari Kasir ke Google Drive -->
           <input type="file" id="quickKasirImageInput" accept="image/*" class="hidden" onchange="handleQuickKasirImageUpload(event)">
 
-          <!-- Grid Katalog Material -->
-          <div id="productGrid" class="flex-1 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-2.5 content-start pr-1"></div>
+          <!-- Grid Katalog Material (Responsif & Nama Barang Jelas di HP) -->
+          <div id="productGrid" class="flex-1 min-h-[340px] lg:min-h-0 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-2.5 content-start pr-1 pb-2"></div>
         </div>
 
         <!-- Kanan: Keranjang Kasir, Pelanggan, Kalkulator Jarak Maps & Pembayaran BON -->
-        <div class="w-full lg:w-96 bg-slate-900 border-t lg:border-t-0 lg:border-l border-slate-800 flex flex-col h-[54vh] lg:h-full shrink-0">
+        <div class="w-full lg:w-96 bg-slate-900 border-t lg:border-t-0 lg:border-l border-slate-800 flex flex-col min-h-[380px] lg:h-full shrink-0">
           <div class="p-3 border-b border-slate-800 flex items-center justify-between">
             <span class="font-extrabold text-xs text-amber-400 flex items-center gap-1.5">
               <i class="fa-solid fa-cart-flatbed"></i> Keranjang Kasir & Pengiriman
@@ -486,12 +489,15 @@
 
             <div class="space-y-1">
               <div class="flex gap-1">
-                <input type="text" id="custAddress" placeholder="Alamat Pengiriman Proyek (Ketik lalu klik Maps)" class="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-100 focus:outline-none focus:border-amber-500">
-                <button type="button" onclick="calculateAddressDistance('kasir')" title="Hitung Jarak & Ongkir Otomatis dari Alamat" class="bg-sky-500/20 hover:bg-sky-500 text-sky-400 hover:text-slate-950 px-2.5 py-1.5 rounded-lg font-bold transition shrink-0">
-                  <i class="fa-solid fa-route"></i> Maps
+                <input type="text" id="custAddress" placeholder="Alamat Pengiriman Proyek (Ketik / Klik GPS)" class="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-100 focus:outline-none focus:border-amber-500">
+                <button type="button" onclick="detectUserGpsLocation('kasir')" title="Titik Otomatis Lokasi GPS HP Saat Ini" class="bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-slate-950 px-2.5 py-1.5 rounded-lg font-extrabold transition shrink-0 flex items-center gap-1">
+                  <i class="fa-solid fa-location-crosshairs"></i> <span class="hidden sm:inline">GPS</span>
                 </button>
-                <button type="button" onclick="openMapPickerModal('kasir')" title="Pilih Titik Lokasi di Peta" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 px-2.5 py-1.5 rounded-lg font-bold transition shrink-0">
-                  <i class="fa-solid fa-location-crosshairs"></i>
+                <button type="button" onclick="calculateAddressDistance('kasir')" title="Hitung Jarak & Ongkir Otomatis dari Alamat" class="bg-sky-500/20 hover:bg-sky-500 text-sky-400 hover:text-slate-950 px-2.5 py-1.5 rounded-lg font-bold transition shrink-0">
+                  <i class="fa-solid fa-route"></i>
+                </button>
+                <button type="button" onclick="openMapPickerModal('kasir')" title="Buka Peta & Titik Lokasi Otomatis" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 px-2.5 py-1.5 rounded-lg font-bold transition shrink-0">
+                  <i class="fa-solid fa-map-location-dot"></i>
                 </button>
               </div>
               <div id="kasirDistanceBadge" class="hidden text-[10px] bg-sky-500/10 border border-sky-500/30 text-sky-300 px-2.5 py-1 rounded-lg font-semibold flex items-center justify-between"></div>
@@ -804,6 +810,9 @@
                 <label class="text-slate-400 block mb-1">Alamat & Kontak Toko (Titik Awal Perhitungan Jarak Maps)</label>
                 <div class="flex gap-1.5">
                   <input type="text" id="cfgStoreAddress" value="Singaraja - Buleleng, Bali" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-100">
+                  <button type="button" onclick="detectUserGpsLocation('store')" title="Gunakan Lokasi GPS HP Saat Ini Sebagai Titik Toko" class="bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-slate-950 px-3 py-2 rounded-xl font-bold shrink-0">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                  </button>
                   <button type="button" onclick="geocodeStoreAddress()" title="Cari Koordinat dari Alamat Toko" class="bg-sky-500/20 hover:bg-sky-500 text-sky-400 hover:text-slate-950 px-3 py-2 rounded-xl font-bold shrink-0">
                     <i class="fa-solid fa-location-dot"></i>
                   </button>
@@ -1117,23 +1126,28 @@
       <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
         <div>
           <h3 class="font-extrabold text-sm text-emerald-400 flex items-center gap-2">
-            <i class="fa-solid fa-map-location-dot"></i> Peta Kalkulator Jarak & Ongkir Otomatis
+            <i class="fa-solid fa-map-location-dot"></i> Peta Kalkulator Jarak & Titik GPS Otomatis
           </h3>
-          <p class="text-[11px] text-slate-400">Klik pada peta tujuan proyek atau cari nama desa/jalan untuk menghitung jarak rute dari Toko Bangunan.</p>
+          <p class="text-[11px] text-slate-400">Otomatis mendeteksi lokasi GPS HP Anda atau klik titik lokasi tujuan pada peta.</p>
         </div>
         <button onclick="closeMapPickerModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
-      <div class="flex gap-2">
-        <input type="text" id="mapModalSearchInput" placeholder="Cari lokasi di Bali / Buleleng (contoh: Lovina, Sukasada, Seririt)..." class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white">
-        <button onclick="searchLocationInsideMapModal()" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold px-4 py-2 rounded-xl shrink-0">
-          <i class="fa-solid fa-magnifying-glass"></i> Cari Peta
+      <div class="flex flex-col sm:flex-row gap-2">
+        <div class="flex gap-1.5 flex-1">
+          <input type="text" id="mapModalSearchInput" placeholder="Cari desa/jalan (contoh: Lovina, Sukasada, Seririt)..." class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white">
+          <button onclick="searchLocationInsideMapModal()" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold px-3.5 py-2 rounded-xl shrink-0">
+            <i class="fa-solid fa-magnifying-glass"></i> Cari
+          </button>
+        </div>
+        <button onclick="locateUserInMapModal(false)" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-3.5 py-2 rounded-xl shrink-0 flex items-center justify-center gap-1.5 shadow">
+          <i class="fa-solid fa-location-crosshairs"></i> Titik Otomatis GPS HP Saya
         </button>
       </div>
       <div id="leafletMapContainer" class="w-full h-72 sm:h-80 rounded-2xl border border-slate-800 z-10"></div>
       <div id="mapRouteSummaryBox" class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex flex-wrap items-center justify-between gap-2">
         <div>
           <span class="text-slate-400 block text-[10px]">Hasil Perhitungan Rute Jalan:</span>
-          <span id="mapDistanceSummaryText" class="font-extrabold text-sm text-amber-400">Klik titik tujuan pada peta</span>
+          <span id="mapDistanceSummaryText" class="font-extrabold text-sm text-amber-400">Mendeteksi lokasi GPS HP / Klik titik tujuan pada peta...</span>
         </div>
         <button onclick="applyPickedMapLocation()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-4 py-2.5 rounded-xl">
           Terapkan Jarak & Ongkir
@@ -2491,7 +2505,98 @@
           leafletMap.setView([sLat, sLng], 13);
           if (storeMarker) storeMarker.setLatLng([sLat, sLng]);
         }
-      }, 150);
+
+        // Otomatis ambil titik lokasi GPS dari HP pengguna saat peta dibuka
+        locateUserInMapModal(true);
+      }, 180);
+    }
+
+    // Reverse Geocoding Koordinat GPS ke Nama Jalan / Desa
+    async function reverseGeocodeLatLng(lat, lng) {
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+        const data = await res.json();
+        if (data && data.display_name) {
+          return data.display_name.split(',').slice(0, 4).join(',').trim();
+        }
+      } catch (e) {}
+      return `Koordinat GPS (${lat.toFixed(5)}, ${lng.toFixed(5)})`;
+    }
+
+    // Deteksi Titik Otomatis Berdasarkan Lokasi GPS HP di dalam Modal Peta
+    function locateUserInMapModal(silentAuto = false) {
+      if (!navigator.geolocation) {
+        if (!silentAuto) showToast('Browser/HP ini tidak mendukung fitur Geolocation GPS.', 'warning');
+        return;
+      }
+
+      const summaryEl = document.getElementById('mapDistanceSummaryText');
+      if (summaryEl) summaryEl.textContent = 'Mendeteksi titik GPS dari lokasi HP Anda...';
+
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          if (leafletMap) {
+            leafletMap.setView([lat, lng], 15);
+          }
+          await updateMapPickerDestination(lat, lng);
+          const addrName = await reverseGeocodeLatLng(lat, lng);
+          lastCalculatedMapResult.address = addrName;
+          if (destMarker) {
+            destMarker.bindPopup(`<b>Lokasi GPS HP Anda</b><br><small>${addrName}</small>`).openPopup();
+          }
+          if (!silentAuto) {
+            showToast('Titik lokasi GPS HP berhasil ditemukan di peta!');
+          }
+        },
+        (err) => {
+          if (!silentAuto) {
+            showToast('Gagal mengakses GPS HP. Pastikan izin Lokasi/GPS aktif di browser HP Anda.', 'warning');
+          } else if (summaryEl) {
+            summaryEl.textContent = 'Klik titik tujuan pada peta atau tekan tombol Titik Otomatis GPS HP';
+          }
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    }
+
+    // Deteksi Titik Otomatis GPS HP Langsung dari Form Kasir / Order Online / Toko
+    function detectUserGpsLocation(targetMode) {
+      if (!navigator.geolocation) {
+        showToast('Perangkat/Browser tidak mendukung sensor GPS.', 'warning');
+        return;
+      }
+
+      showToast('Mengambil titik koordinat otomatis dari GPS HP Anda...');
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          const addrName = await reverseGeocodeLatLng(lat, lng);
+
+          if (targetMode === 'store') {
+            document.getElementById('cfgStoreLat').value = lat.toFixed(5);
+            document.getElementById('cfgStoreLng').value = lng.toFixed(5);
+            if (addrName) document.getElementById('cfgStoreAddress').value = addrName;
+            saveCloudConfig();
+            showToast('Lokasi GPS Toko berhasil diatur dari posisi HP Anda!');
+            return;
+          }
+
+          const inputId = targetMode === 'public' ? 'pubCustAddress' : 'custAddress';
+          const inputEl = document.getElementById(inputId);
+          if (inputEl) inputEl.value = addrName;
+
+          const result = await computeRoadDistanceAndFee(lat, lng, addrName);
+          applyDistanceResultToTarget(targetMode, result);
+        },
+        (err) => {
+          showToast('Izin lokasi GPS ditolak atau tidak aktif. Membuka peta manual...', 'warning');
+          openMapPickerModal(targetMode);
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
     }
 
     async function updateMapPickerDestination(lat, lng) {
@@ -2678,27 +2783,27 @@
         const imgSrc = p.imageUrl || `https://placehold.co/300x200/1e293b/f59e0b?text=${encodeURIComponent(p.name.slice(0, 14))}`;
 
         return `
-          <div onclick="addToCart('${p.id}')" class="bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-amber-500/50 rounded-2xl overflow-hidden flex flex-col justify-between cursor-pointer active:scale-95 transition group">
+          <div onclick="addToCart('${p.id}')" class="bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-amber-500/50 rounded-2xl flex flex-col justify-between cursor-pointer active:scale-95 transition group">
             <div>
-              <div class="h-28 w-full bg-slate-950 relative overflow-hidden">
+              <div class="h-20 sm:h-28 w-full bg-slate-950 relative rounded-t-2xl overflow-hidden">
                 <img src="${imgSrc}" onerror="this.src='https://placehold.co/300x200/1e293b/f59e0b?text=Material'" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                <span class="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded bg-slate-950/80 text-slate-300 backdrop-blur truncate max-w-[65%]">${p.category}</span>
-                <button type="button" onclick="triggerQuickKasirImageUpload(event, '${p.id}')" title="Upload / Ganti Foto Barang ke Google Drive" class="absolute top-2 right-2 bg-slate-950/85 hover:bg-sky-500 text-sky-400 hover:text-slate-950 w-7 h-7 rounded-lg flex items-center justify-center text-xs shadow backdrop-blur transition">
+                <span class="absolute top-1.5 left-1.5 text-[9px] font-bold px-2 py-0.5 rounded bg-slate-950/85 text-slate-200 backdrop-blur truncate max-w-[65%]">${p.category}</span>
+                <button type="button" onclick="triggerQuickKasirImageUpload(event, '${p.id}')" title="Upload / Ganti Foto Barang ke Google Drive" class="absolute top-1.5 right-1.5 bg-slate-950/85 hover:bg-sky-500 text-sky-400 hover:text-slate-950 w-7 h-7 rounded-lg flex items-center justify-center text-xs shadow backdrop-blur transition">
                   <i class="fa-solid fa-camera"></i>
                 </button>
-                <span class="absolute bottom-1.5 right-2 text-[10px] font-bold px-2 py-0.5 rounded bg-slate-950/85 ${p.stock > 10 ? 'text-emerald-400' : 'text-rose-400'}">Stok: ${p.stock} ${p.unit}</span>
+                <span class="absolute bottom-1 right-1.5 text-[10px] font-bold px-2 py-0.5 rounded bg-slate-950/90 ${p.stock > 10 ? 'text-emerald-400' : 'text-rose-400'}">Stok: ${p.stock} ${p.unit}</span>
               </div>
-              <div class="p-3 pb-1">
-                <h3 class="font-bold text-xs sm:text-sm text-slate-100 leading-snug">${p.name}</h3>
-                ${p.barcode ? `<span class="text-[9px] font-mono text-sky-400 block mt-0.5"><i class="fa-solid fa-barcode mr-1"></i>${p.barcode}</span>` : ''}
+              <div class="p-2.5 sm:p-3 pb-1">
+                <h3 class="font-extrabold text-xs sm:text-sm text-white leading-snug break-words min-h-[2.2rem]">${p.name}</h3>
+                ${p.barcode ? `<span class="text-[9px] font-mono text-sky-400 block mt-0.5 truncate"><i class="fa-solid fa-barcode mr-1"></i>${p.barcode}</span>` : ''}
               </div>
             </div>
-            <div class="p-3 pt-2 mt-1 border-t border-slate-800/80 flex items-end justify-between">
+            <div class="p-2.5 sm:p-3 pt-2 mt-1 border-t border-slate-800/80 flex items-end justify-between">
               <div>
                 <span class="text-[10px] text-slate-400 block">Harga / ${p.unit}</span>
-                <span class="text-sm font-extrabold text-amber-400">Rp ${formatRp(activePrice)}</span>
+                <span class="text-xs sm:text-sm font-extrabold text-amber-400">Rp ${formatRp(activePrice)}</span>
               </div>
-              <div class="w-7 h-7 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-bold">
+              <div class="w-7 h-7 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-bold shrink-0">
                 <i class="fa-solid fa-plus text-xs"></i>
               </div>
             </div>
@@ -2768,11 +2873,11 @@
       } else {
         list.innerHTML = cart.map(item => `
           <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between gap-2">
-            <div class="flex-1 truncate">
-              <h4 class="font-bold text-xs text-slate-200 truncate">${item.name}</h4>
-              <span class="text-[11px] font-bold text-amber-400">Rp ${formatRp(item.price)} / ${item.unit}</span>
+            <div class="flex-1 min-w-0">
+              <h4 class="font-extrabold text-xs text-white leading-snug break-words">${item.name}</h4>
+              <span class="text-[11px] font-bold text-amber-400 block mt-0.5">Rp ${formatRp(item.price)} / ${item.unit}</span>
             </div>
-            <div class="flex items-center gap-1">
+            <div class="flex items-center gap-1 shrink-0">
               <button onclick="changeQty('${item.id}', -1)" class="w-6 h-6 rounded bg-slate-800 text-white font-bold text-xs">-</button>
               <span class="w-7 text-center text-xs font-extrabold">${item.qty}</span>
               <button onclick="changeQty('${item.id}', 1)" class="w-6 h-6 rounded bg-amber-500 text-slate-950 font-bold text-xs">+</button>
